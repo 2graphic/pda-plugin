@@ -27,7 +27,7 @@ export class State {
     public active: Node[];
     public stacks: string = "";
 
-    constructor(public activeStates: GeneralSet<ActiveState>,
+    constructor(public activeStates: GeneralSet,
         public inputLeft: string,
         public message: string) {
         this.active = [...activeStates.values()].map((s) => s.node);
@@ -65,8 +65,8 @@ export function step(current: State): State | boolean {
     let nextSymbol = current.inputLeft.charAt(0);
     let remainingInput = current.inputLeft.substring(1);
 
-    const f = (activeStates: GeneralSet<ActiveState>, nextSymbol: string) => {
-        const r = new GeneralSet<ActiveState>([]);
+    const f = (activeStates: GeneralSet, nextSymbol: string) => {
+        const r = new GeneralSet([]);
 
         [...activeStates.values()].forEach((s) => {
             let topOfStack = s.stack.charAt(0);
@@ -104,11 +104,10 @@ interface Comparable<T> {
     equals(other: T): boolean;
 }
 
-class GeneralSet<T extends Comparable<T>> {
-    private set: Set<T>;
+class GeneralSet {
+    private set: ActiveState[] = [];
 
-    constructor(initial: T[]) {
-        this.set = new Set();
+    constructor(initial: ActiveState[]) {
         this[Symbol.iterator] = this.values;
 
         if (initial) {
@@ -117,8 +116,8 @@ class GeneralSet<T extends Comparable<T>> {
     }
 
     add(item: T) {
-        if (![...this.set.values()].find((i) => item.equals(i))) {
-            this.set.add(item);
+        if (!this.set.find((i) => item.equals(i))) {
+            this.set.push(item);
         }
     }
 
@@ -127,6 +126,6 @@ class GeneralSet<T extends Comparable<T>> {
     }
 
     get size() {
-        return this.set.size;
+        return this.set.length;
     }
 }
