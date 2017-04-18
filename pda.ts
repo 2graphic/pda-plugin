@@ -100,10 +100,6 @@ export function step(current: State): State | boolean {
     return new State(nextStates, remainingInput, nextStates.size + " active. Input: " + remainingInput);
 }
 
-interface Comparable<T> {
-    equals(other: T): boolean;
-}
-
 class GeneralSet {
     private set: ActiveState[] = [];
 
@@ -115,14 +111,14 @@ class GeneralSet {
         }
     }
 
-    add(item: T) {
+    add(item: ActiveState) {
         if (!this.set.find((i) => item.equals(i))) {
             this.set.push(item);
         }
     }
 
     values() {
-        return this.set.values();
+        return this.set;
     }
 
     get size() {
