@@ -102,6 +102,7 @@ export function step(current: State): State | boolean {
 
 class GeneralSet {
     private set: ActiveState[] = [];
+    [Symbol.iterator]: () => Iterable<ActiveState>;
 
     constructor(initial: ActiveState[]) {
         this[Symbol.iterator] = this.values;
