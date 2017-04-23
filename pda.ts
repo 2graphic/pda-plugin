@@ -13,6 +13,11 @@ export class Edge {
     onStack: string;
     writeStack: string;
     destination: Node;
+
+    get label() {
+        const isEmpty = (s: string) => !s || s.length === 0;
+        return (!isEmpty(this.onInput) ? this.onInput : "λ") + ", " + (!isEmpty(this.onStack) ? this.onStack : "λ") + "; " + (!isEmpty(this.writeStack) ? this.writeStack : "λ");
+    }
 }
 
 export class Graph {
@@ -24,15 +29,15 @@ export type Nodes = Node;
 export type Edges = Edge;
 
 export class State {
-    public active: Node[];
-    public stacks: string = "";
+    private active: Node[];
+    public stacks: [Node, string][] = [];
 
-    constructor(public activeStates: GeneralSet,
+    constructor(private activeStates: GeneralSet,
         public inputLeft: string,
         public message: string) {
         this.active = [...activeStates.values()].map((s) => s.node);
         [...activeStates.values()].forEach((s) => {
-            this.stacks += s.node.label + ": " + s.stack + "\n";
+            this.stacks.push([s.node, s.stack]);
         });
     }
 }
