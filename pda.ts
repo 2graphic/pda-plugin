@@ -1,3 +1,5 @@
+function hidden(target: any, key: string) { };
+
 export class Node {
     /** Start State */
     isStartState: boolean;
@@ -29,14 +31,19 @@ export type Nodes = Node;
 export type Edges = Edge;
 
 export class State {
-    private active: Node[];
+    @hidden
+    active: Node[];
+    @hidden
+    activeStates: GeneralSet;
     public stacks: [Node, string][] = [];
 
-    constructor(private activeStates: GeneralSet,
+    constructor(
+        activeStates: GeneralSet,
         public inputLeft: string,
         public message: string) {
         this.active = [...activeStates.values()].map((s) => s.node);
         [...activeStates.values()].forEach((s) => {
+            this.activeStates = activeStates;
             this.stacks.push([s.node, s.stack]);
         });
     }
