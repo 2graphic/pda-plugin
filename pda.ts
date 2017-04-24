@@ -8,6 +8,30 @@ export class Node {
     children: Edge[];
 
     label: string;
+
+    private get image(): string {
+        if (this.isStartState && this.isAcceptState) {
+            return "start_accept_state.svg";
+        }
+        if (this.isAcceptState) {
+            return "accept_state.svg";
+        }
+        if (this.isStartState) {
+            return "start_state.svg";
+        }
+        return "";
+    }
+
+    private get origin(): { x: number, y: number } {
+        return {
+            x: this.isStartState ? 10 : 0,
+            y: 0
+        };
+    }
+
+    private get shape(): string {
+        return "circle";
+    }
 }
 
 export class Edge {
