@@ -28,10 +28,6 @@ export class Node {
             y: 0
         };
     }
-
-    private get shape(): string {
-        return "circle";
-    }
 }
 
 export class Edge {
