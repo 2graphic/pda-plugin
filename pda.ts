@@ -1,4 +1,4 @@
-function hidden(target: any, key: string) { };
+function hidden(...args: any[]) { };
 
 export class Node {
     /** Start State */
@@ -57,14 +57,16 @@ export class State {
     activeStates: GeneralSet;
     public stacks: [Node, string][] = [];
 
+    public message: string;
+
     constructor(
         activeStates: GeneralSet,
-        public inputLeft: string,
-        public message: string) {
+        @hidden public inputLeft: string) {
         this.active = [...activeStates.values()].map((s) => s.node);
         [...activeStates.values()].forEach((s) => {
             this.activeStates = activeStates;
             this.stacks.push([s.node, s.stack]);
+            this.message = inputLeft;
         });
     }
 }
@@ -86,7 +88,7 @@ export function start(input: Graph, data: string): State | boolean {
         throw new Error("provide a symbol for empty stacks");
     }
 
-    return new State(new GeneralSet(startStates.map((n) => new ActiveState(n, input.emptyStack))), data, "Starting...");
+    return new State(new GeneralSet(startStates.map((n) => new ActiveState(n, input.emptyStack))), data);
 }
 
 export function step(current: State): State | boolean {
@@ -129,7 +131,7 @@ export function step(current: State): State | boolean {
     }
 
 
-    return new State(nextStates, remainingInput, nextStates.size + " active. Input: " + remainingInput);
+    return new State(nextStates, remainingInput);
 }
 
 class GeneralSet {
